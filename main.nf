@@ -15,14 +15,17 @@ process createFile {
  
     """
     for i in {1..$params.numFiles}
-        cp input.fa output_{i}.fa
+    do
+        cp input.fa output_{\$i}.fa
+	echo \$i >> output_{\$i}.fa
+    done
     """
 }
  
 /*
- * Reverse the sequences
+ * Count the lines
  */
-process reverse {
+process count_lines {
  
     input:
     path x
@@ -39,7 +42,6 @@ process reverse {
  * Define the workflow
  */
 workflow {
-    splitSequences(params.in) \
-      | reverse \
-      | view
+    files_ch = createFile(params.in)
+    count_lines(files_ch.flatten())
 }
