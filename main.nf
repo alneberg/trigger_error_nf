@@ -34,6 +34,7 @@ process count_lines {
     stdout
  
     """
+    sleep $params.sleepTime;
     wc -l $x
     """
 }
